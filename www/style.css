@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+}
+
+.content {
+  background-color: rgb(10 8 8 / 80%);
+  margin: auto;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.post_container {
+  background-color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  min-width: 20rem;
+  row-gap: 1.5rem;
+  padding: 1rem;
+}
+
+.form_button {
+  background-color: green;
+  border-radius: 0.5rem;
+  color: white;
+  padding: 0.5rem 3.5rem;
+  font-size: large;
+}
+
+.form_input {
+  padding: 0.2rem 0.5rem 0.2rem 0;
+}
+
+.error_message {
+  color: red;
+  font-size: large;
+}
+
+.valid_message {
+  color: green;
+  font-size: large;
+}

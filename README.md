@@ -3,6 +3,22 @@
 - docker build .
 - docker compose up
 
+pgAdmin:
+
+CREATE TABLE IF NOT EXISTS public."user"
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    firstname character varying(50) COLLATE pg_catalog."default",
+    lastname character varying(50) COLLATE pg_catalog."default",
+    account_activation_hash character varying(64) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    CONSTRAINT user_pkey PRIMARY KEY (id),
+    CONSTRAINT user_account_activation_hash_key UNIQUE (account_activation_hash),
+    CONSTRAINT user_email_key UNIQUE (email)
+)
+
+
 SMTP:
 
 - Ajouter les valeurs Username et Password de votre SMTP dans le fichier www/SendEmailFunction.php

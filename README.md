@@ -5,6 +5,8 @@
 
 pgAdmin:
 
+-Copier et coller dans le "Query tool" puis run pour ajouter la table user.
+
 CREATE TABLE IF NOT EXISTS public."user"
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),

@@ -40,6 +40,12 @@ function sendAccountMail($mail, $mailToSend, $activationHash)
     $mail->Body    = 'This is the HTML message body <a href="http://localhost:8080/activateAccount.php?token='.$activationHash.'">activer votre compte.</b>';
     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-    $mail->send();
+    if (empty($mail->Username) || empty($mail->Password)) {
+        return ("identifiants SMTP manquants.");
+    } else {
+        $mail->send();
+        return ("Veuillez valider votre email pour activer votre compte");
+    }
+
 
 }

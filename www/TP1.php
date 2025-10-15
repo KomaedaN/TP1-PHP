@@ -37,53 +37,46 @@ $db = new PDO("pgsql:host=pg-db dbname=devdb user=devuser password=devpass");
 $message = "";
 $classValue = "";
 
-if(!empty($_POST)) 
-{
+if (!empty($_POST)) {
     $firstName = ucfirst(trim($_POST['firstName']));
     $lastName = ucfirst(trim($_POST['lastName']));
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirmPassword']);
     $clearEmail = strtolower(trim($_POST['email']));
-    if(!$password || !$confirmPassword){
+    if (!$password || !$confirmPassword) {
         $message = "Erreur ajouter un mot de passe.";
         $classValue = 'error_message';
-    } elseif(!$clearEmail) {
+    } elseif (!$clearEmail) {
         $message =  "Email manquant.";
         $classValue = 'error_message';
     } else {
-            $userMail = $db->prepare('SELECT email from "user" WHERE email = :email LIMIT 1');
-            $userMail->execute(['email' => $clearEmail]);
-            $confirmMail = $userMail->fetch(PDO::FETCH_ASSOC);
-            if($confirmMail){
-                $message = 'Votre email est déjà relié à un compte';
-                $classValue = 'error_message';
-            } elseif($password !== $confirmPassword){
-                    $message = "Erreur les mots de passe ne correspondent pas.";
-                    $classValue = 'error_message';
-                } else {
-                    $activation_token = bin2hex(random_bytes(32));
-                    $activation_token_hash = hash("sha256", $activation_token);
-                    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $res = $db->prepare('INSERT INTO "user" (firstname, lastname, email, password, account_activation_hash) VALUES (:firstname, :lastname, :email, :password, :account_activation_hash)');
-                    $res->execute([
-                        ':firstname' => $firstName,
-                        ':lastname' => $lastName,
-                        ':email' => $clearEmail,
-                        ':password' => $hashPassword,
-                        ':account_activation_hash' => $activation_token_hash
-                    ]);
-                    require_once './SendMailFunction.php';
-                    $mail = new PHPMailer(true);
-                    sendAccountMail($mail, $clearEmail, $activation_token);
-                    if($res) {
-                        $message = 'Veuillez valider votre email pour activer votre compte';
-                        $classValue = 'valid_message';
-                    } else {
-                        $message = "Erreur lors de la création de l'utilisateur.";
-                        $classValue = 'error_message'; 
-                    }
-                }  
-            }
+        $userMail = $db->prepare('SELECT email from "user" WHERE email = :email LIMIT 1');
+        $userMail->execute(['email' => $clearEmail]);
+        $confirmMail = $userMail->fetch(PDO::FETCH_ASSOC);
+        if ($confirmMail) {
+            $message = 'Votre email est déjà relié à un compte';
+            $classValue = 'error_message';
+        } elseif ($password !== $confirmPassword) {
+            $message = "Erreur les mots de passe ne correspondent pas.";
+            $classValue = 'error_message';
+        } else {
+            $activation_token = bin2hex(random_bytes(32));
+            $activation_token_hash = hash("sha256", $activation_token);
+            $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+            $res = $db->prepare('INSERT INTO "user" (firstname, lastname, email, password, account_activation_hash) VALUES (:firstname, :lastname, :email, :password, :account_activation_hash)');
+            $res->execute([
+                ':firstname' => $firstName,
+                ':lastname' => $lastName,
+                ':email' => $clearEmail,
+                ':password' => $hashPassword,
+                ':account_activation_hash' => $activation_token_hash
+            ]);
+            require_once './SendMailFunction.php';
+            $mail = new PHPMailer(true);
+            $result = sendAccountMail($mail, $clearEmail, $activation_token);
+            $message = $result;
+        }
+    }
 }
 
 ?>
@@ -102,15 +95,21 @@ if(!empty($_POST))
             <h1>Inscription</h1>
             <div>
                 <label for="firstName">Entrer votre prénom:</label><br/>
-                <input type="text" name="firstName" placeholder="Prénom" class="form_input" value="<?php if(isset($_POST['firstName'])) echo htmlspecialchars($_POST['firstName']); ?>">
+                <input type="text" name="firstName" placeholder="Prénom" class="form_input" value="<?php if (isset($_POST['firstName'])) {
+                    echo htmlspecialchars($_POST['firstName']);
+                } ?>">
             </div>
             <div>
                 <label for="lastName">Entrer votre nom:</label><br/>
-                <input type="text" name="lastName" placeholder="Nom" class="form_input" value="<?php if(isset($_POST['lastName'])) echo htmlspecialchars($_POST['lastName']); ?>">
+                <input type="text" name="lastName" placeholder="Nom" class="form_input" value="<?php if (isset($_POST['lastName'])) {
+                    echo htmlspecialchars($_POST['lastName']);
+                } ?>">
             </div>
             <div>
                 <label for="email">Entrer votre email:</label><br/>
-                <input type="email" name="email" placeholder="Email" class="form_input" required value="<?php if(isset($_POST['email'])) echo htmlspecialchars($_POST['email']); ?>">
+                <input type="email" name="email" placeholder="Email" class="form_input" required value="<?php if (isset($_POST['email'])) {
+                    echo htmlspecialchars($_POST['email']);
+                } ?>">
             </div>
             <div>
                 <label for="password">Entrer votre mot de passe:</label><br/>
@@ -123,7 +122,7 @@ if(!empty($_POST))
             <div>
                 <input type="submit" class="form_button">
             </div>
-            <?php if($message) :?>
+            <?php if ($message) :?>
                 <p class=<?php echo $classValue; ?>><?php echo htmlspecialchars($message); ?></p>
             <?php endif; ?>
             

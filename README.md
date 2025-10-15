@@ -28,7 +28,7 @@ SMTP:
 
 
 
-
+ETAPE:
 - Nettoyer les valeurs, exemple trim sur l'email et lowercase (5 points)
 
 "htmlspecialchars()" sur les input affichés.

@@ -26,6 +26,9 @@ SMTP:
 - Ajouter les valeurs Username et Password de votre SMTP dans le fichier www/SendEmailFunction.php
 - docker compose run --rm composer composer install
 
+
+
+
 - Nettoyer les valeurs, exemple trim sur l'email et lowercase (5 points)
 
 "htmlspecialchars()" sur les input affichés.

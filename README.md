@@ -61,3 +61,5 @@ les erreurs sont affichées au cas par cas.
 toutes les valeurs sont remises sauf le mot de passe (je ne sais pas si c'est pertinent de mettre l'email, dans le doute je l'ai remis).
 
 - Bonus de 3 points si vous arrivez à envoyer un mail via un compte SMTP de votre choix pour valider l'adresse email en bdd
+Ajout "account_activation_hash" dans la table user
+La valeur est supprimé quand l'email est validé
